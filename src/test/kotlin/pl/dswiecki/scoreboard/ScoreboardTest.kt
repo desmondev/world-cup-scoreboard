@@ -13,4 +13,16 @@ class ScoreboardTest {
 
         assertTrue(summary.isEmpty())
     }
+
+    @Test
+    fun `should start a new game`() {
+        val scoreboard = Scoreboard()
+
+        scoreboard.startGame("Team A", "Team B")
+
+        val summary = scoreboard.getSummary()
+
+        assertTrue(summary.isNotEmpty())
+    }
+
 }
