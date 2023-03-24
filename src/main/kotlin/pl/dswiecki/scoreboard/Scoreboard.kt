@@ -47,7 +47,6 @@ data class Game(
     val finishedAt: OffsetDateTime? = null
 ) {
     fun updateHomeTeamScore(newScore: Int) = copy(homeTeamScore = homeTeamScore.updateScore(newScore))
-
     fun updateAwayTeamScore(newScore: Int) = copy(awayTeamScore = awayTeamScore.updateScore(newScore))
     fun totalScore(): Int = homeTeamScore.score + awayTeamScore.score
     fun isActive(): Boolean = finishedAt == null

@@ -31,3 +31,15 @@ The summary should be as follows:
 3. Mexico 0 - Canada 5
 4. Argentina 3 - Australia 1
 5. Germany 2 - France 2
+
+## How to run the tests
+
+```bash
+./gradlew test
+```
+
+## How to run the application
+
+```bash
+./gradlew run
+```

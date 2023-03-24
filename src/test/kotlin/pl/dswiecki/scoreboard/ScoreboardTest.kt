@@ -80,7 +80,7 @@ class ScoreboardTest {
     }
 
     @Test
-    fun `should throw when trying to finished inactive game`() {
+    fun `should throw when trying to finish inactive game`() {
         val scoreboard = Scoreboard()
         val game = scoreboard.startGame("Team A", "Team B")
 
