@@ -6,18 +6,21 @@ import java.util.UUID
 class Scoreboard {
 
     private var games = mutableMapOf<UUID, Game>()
+    private val activeGames get() = games.values.toList().filter { it.isActive() }
 
     fun getSummary(): List<Game> {
-        return games.values.toList()
-            .filter { it.isActive() }
-            .sortedWith(
-                compareByDescending<Game> { it.totalScore() }
-                    .thenByDescending { it.startedAt }
-            )
+        return activeGames.sortedWith(
+            compareByDescending<Game> { it.totalScore() }
+                .thenByDescending { it.startedAt }
+        )
     }
 
     fun startGame(homeTeam: String, awayTeam: String): Game {
         val game = Game(TeamScore.initial(homeTeam), TeamScore.initial(awayTeam))
+        require(
+            !activeGames
+                .flatMap { listOf(it.homeTeam, it.awayTeam) }
+                .any { it == homeTeam || it == awayTeam }) { "Team already playing" }
         games[game.id] = game
         return game
     }

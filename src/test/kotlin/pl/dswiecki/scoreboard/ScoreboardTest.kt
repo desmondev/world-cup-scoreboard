@@ -102,4 +102,15 @@ class ScoreboardTest {
             scoreboard.updateGame(UUID.randomUUID(), 1 to 0)
         }
     }
+
+    @Test
+    fun `should throw when starting a game with already playing team`() {
+        val scoreboard = Scoreboard()
+        val game1 = scoreboard.startGame("Team A", "Team B")
+
+        assertThrows<IllegalArgumentException>("Team already playing") {
+            scoreboard.startGame(game1.homeTeam, "Team C")
+        }
+
+    }
 }
