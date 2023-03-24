@@ -25,4 +25,16 @@ class ScoreboardTest {
         assertTrue(summary.isNotEmpty())
     }
 
+    @Test
+    fun `should update game score`() {
+        val scoreboard = Scoreboard()
+
+        var game = scoreboard.startGame("Team A", "Team B")
+
+        game = scoreboard.updateGame(game.id, game.homeTeam, 1)
+
+        assertEquals(1, game.homeTeamScore.score)
+    }
+
+
 }
