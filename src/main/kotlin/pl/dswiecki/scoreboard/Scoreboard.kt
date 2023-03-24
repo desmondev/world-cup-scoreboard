@@ -9,6 +9,7 @@ class Scoreboard {
 
     fun getSummary(): List<Game> {
         return games.values.toList()
+            .filter { it.isActive() }
             .sortedWith(
                 compareByDescending<Game> { it.totalScore() }
                     .thenByDescending { it.startedAt }
@@ -30,17 +31,27 @@ class Scoreboard {
         return updatedGame
     }
 
+    fun finishGame(id: UUID) {
+        val oldGame = games[id] ?: throw IllegalArgumentException("Game not found")
+        assert(oldGame.isActive()) { "Game already finished" }
+        val finishedGame = oldGame.finish()
+        games[id] = finishedGame
+    }
+
 }
 
 data class Game(
     val homeTeamScore: TeamScore,
     val awayTeamScore: TeamScore,
-    val startedAt: OffsetDateTime = OffsetDateTime.now()
+    val startedAt: OffsetDateTime = OffsetDateTime.now(),
+    val finishedAt: OffsetDateTime? = null
 ) {
     fun updateHomeTeamScore(newScore: Int) = copy(homeTeamScore = homeTeamScore.updateScore(newScore))
 
     fun updateAwayTeamScore(newScore: Int) = copy(awayTeamScore = awayTeamScore.updateScore(newScore))
     fun totalScore(): Int = homeTeamScore.score + awayTeamScore.score
+    fun isActive(): Boolean = finishedAt == null
+    fun finish(): Game = copy(finishedAt = OffsetDateTime.now())
 
     val id: UUID = UUID.randomUUID()
     val homeTeam: String = homeTeamScore.team

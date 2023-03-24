@@ -63,4 +63,18 @@ class ScoreboardTest {
         assertEquals(0, summary[2].awayTeamScore.score)
     }
 
+    @Test
+    fun `should finish a game`() {
+        val scoreboard = Scoreboard()
+            .apply { startGame("Team A", "Team B") }
+
+        val summary = scoreboard.getSummary()
+        assertTrue(summary.isNotEmpty())
+
+        scoreboard.finishGame(summary[0].id)
+
+        val summaryAfterFinished = scoreboard.getSummary()
+        assertTrue(summaryAfterFinished.isEmpty())
+    }
+
 }
