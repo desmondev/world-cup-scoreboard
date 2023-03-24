@@ -1,13 +1,18 @@
 package pl.dswiecki.scoreboard
 
+import java.time.OffsetDateTime
 import java.util.UUID
 
 class Scoreboard {
 
-    var games = mutableMapOf<UUID, Game>()
+    private var games = mutableMapOf<UUID, Game>()
 
     fun getSummary(): List<Game> {
         return games.values.toList()
+            .sortedWith(
+                compareByDescending<Game> { it.totalScore() }
+                    .thenByDescending { it.startedAt }
+            )
     }
 
     fun startGame(homeTeam: String, awayTeam: String): Game {
@@ -38,11 +43,13 @@ class Scoreboard {
 
 data class Game(
     val homeTeamScore: TeamScore,
-    val awayTeamScore: TeamScore
+    val awayTeamScore: TeamScore,
+    val startedAt: OffsetDateTime = OffsetDateTime.now()
 ) {
     fun updateHomeTeamScore(newScore: Int) = copy(homeTeamScore = homeTeamScore.updateScore(newScore))
 
     fun updateAwayTeamScore(newScore: Int) = copy(awayTeamScore = awayTeamScore.updateScore(newScore))
+    fun totalScore(): Int = homeTeamScore.score + awayTeamScore.score
 
     val id: UUID = UUID.randomUUID()
     val homeTeam: String = homeTeamScore.team

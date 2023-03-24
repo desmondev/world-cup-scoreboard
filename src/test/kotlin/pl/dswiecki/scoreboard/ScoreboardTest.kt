@@ -36,5 +36,32 @@ class ScoreboardTest {
         assertEquals(1, game.homeTeamScore.score)
     }
 
+    @Test
+    fun `should return ordered scoreboard for game with same total score`() {
+        val scoreboard = Scoreboard()
+
+        val game1 = scoreboard.startGame("Team A", "Team B")
+        val game2 = scoreboard.startGame("Team C", "Team D")
+        val game3 = scoreboard.startGame("Team E", "Team F")
+
+        scoreboard.updateGame(game1.id, "Team A", 1)
+        scoreboard.updateGame(game2.id, "Team C", 1)
+
+        val summary = scoreboard.getSummary()
+        summary.forEach { println(it) }
+        assertEquals("Team C", summary[0].homeTeam)
+        assertEquals(1, summary[0].homeTeamScore.score)
+        assertEquals("Team D", summary[0].awayTeam)
+        assertEquals(0, summary[0].awayTeamScore.score)
+        assertEquals("Team A", summary[1].homeTeam)
+        assertEquals(1, summary[1].homeTeamScore.score)
+        assertEquals("Team B", summary[1].awayTeam)
+        assertEquals(0, summary[1].awayTeamScore.score)
+        assertEquals("Team E", summary[2].homeTeam)
+        assertEquals(0, summary[2].homeTeamScore.score)
+        assertEquals("Team F", summary[2].awayTeam)
+        assertEquals(0, summary[2].awayTeamScore.score)
+    }
+
 
 }
