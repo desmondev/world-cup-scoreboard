@@ -33,7 +33,7 @@ class Scoreboard {
 
     fun finishGame(id: UUID) {
         val oldGame = games[id] ?: throw IllegalArgumentException("Game not found")
-        assert(oldGame.isActive()) { "Game already finished" }
+        require(oldGame.isActive()) { "Game already finished" }
         val finishedGame = oldGame.finish()
         games[id] = finishedGame
     }
@@ -63,7 +63,7 @@ data class TeamScore(
     val score: Int
 ) {
     fun updateScore(newScore: Int): TeamScore {
-        assert(newScore >= score) {
+        require(newScore >= score) {
             "New score must be greater than current score"
         }
         return copy(score = newScore)

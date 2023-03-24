@@ -2,6 +2,8 @@ package pl.dswiecki.scoreboard
 
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
+import java.util.UUID
 
 class ScoreboardTest {
 
@@ -77,4 +79,27 @@ class ScoreboardTest {
         assertTrue(summaryAfterFinished.isEmpty())
     }
 
+    @Test
+    fun `should throw when trying to finished inactive game`() {
+        val scoreboard = Scoreboard()
+        val game = scoreboard.startGame("Team A", "Team B")
+
+        scoreboard.finishGame(game.id)
+
+        val summaryAfterFinished = scoreboard.getSummary()
+        assertTrue(summaryAfterFinished.isEmpty())
+
+        assertThrows<IllegalArgumentException>("Game already finished") {
+            scoreboard.finishGame(game.id)
+        }
+    }
+
+    @Test
+    fun `should throw when trying to update non existing game`() {
+        val scoreboard = Scoreboard()
+
+        assertThrows<IllegalArgumentException>("Game not found") {
+            scoreboard.updateGame(UUID.randomUUID(), 1 to 0)
+        }
+    }
 }
