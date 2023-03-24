@@ -1,3 +1,5 @@
+package pl.dswiecki
+
 fun main(args: Array<String>) {
     println("Hello World!")
 
