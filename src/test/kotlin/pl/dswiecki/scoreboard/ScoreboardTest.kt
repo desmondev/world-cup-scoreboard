@@ -31,7 +31,7 @@ class ScoreboardTest {
 
         var game = scoreboard.startGame("Team A", "Team B")
 
-        game = scoreboard.updateGame(game.id, game.homeTeam, 1)
+        game = scoreboard.updateGame(game.id, 1 to 0)
 
         assertEquals(1, game.homeTeamScore.score)
     }
@@ -44,8 +44,8 @@ class ScoreboardTest {
         val game2 = scoreboard.startGame("Team C", "Team D")
         val game3 = scoreboard.startGame("Team E", "Team F")
 
-        scoreboard.updateGame(game1.id, "Team A", 1)
-        scoreboard.updateGame(game2.id, "Team C", 1)
+        scoreboard.updateGame(game1.id, 1 to 0)
+        scoreboard.updateGame(game2.id, 1 to 0)
 
         val summary = scoreboard.getSummary()
         summary.forEach { println(it) }
@@ -62,6 +62,5 @@ class ScoreboardTest {
         assertEquals("Team F", summary[2].awayTeam)
         assertEquals(0, summary[2].awayTeamScore.score)
     }
-
 
 }

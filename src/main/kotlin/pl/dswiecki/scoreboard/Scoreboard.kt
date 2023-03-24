@@ -21,24 +21,15 @@ class Scoreboard {
         return game
     }
 
-    fun updateGame(game: UUID, team: String, newScore: Int): Game {
-        val gameToUpdate = games[game] ?: throw IllegalArgumentException("Game not found")
-        val updatedGame = updateSpecificGame(gameToUpdate, team, newScore)
+    fun updateGame(game: UUID, newScore: Pair<Int, Int>): Game {
+        val oldGame = games[game] ?: throw IllegalArgumentException("Game not found")
+        val updatedGame = oldGame
+            .updateHomeTeamScore(newScore.first)
+            .updateAwayTeamScore(newScore.second)
         games[game] = updatedGame
         return updatedGame
     }
 
-    private fun updateSpecificGame(
-        gameToUpdate: Game,
-        team: String,
-        newScore: Int
-    ): Game {
-        return when {
-            gameToUpdate.homeTeamScore.team == team -> gameToUpdate.updateHomeTeamScore(newScore)
-            gameToUpdate.awayTeamScore.team == team -> gameToUpdate.updateAwayTeamScore(newScore)
-            else -> throw IllegalArgumentException("Team not found")
-        }
-    }
 }
 
 data class Game(
@@ -61,7 +52,7 @@ data class TeamScore(
     val score: Int
 ) {
     fun updateScore(newScore: Int): TeamScore {
-        assert(newScore > score) {
+        assert(newScore >= score) {
             "New score must be greater than current score"
         }
         return copy(score = newScore)
